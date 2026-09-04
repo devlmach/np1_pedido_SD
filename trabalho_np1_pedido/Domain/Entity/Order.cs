@@ -11,5 +11,6 @@ namespace trabalho_np1_pedido.Domain.Entity
         [JsonIgnore]
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public List<ProductItemDto> Products { get; set; }
+        public decimal TotalOrderPrice { get; set; }
     }
 }
