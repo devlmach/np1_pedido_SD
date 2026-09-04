@@ -1,0 +1,7 @@
+#Build
+bin/
+obj/
+
+#Local
+.vs/
+.vs
