@@ -17,16 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Dto\" />
     <Folder Include="Application\Mapping\" />
     <Folder Include="Application\Service\Interface\" />
     <Folder Include="Common\Middleware\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Data\Context\" />
     <Folder Include="Data\Repository\Interface\" />
-    <Folder Include="Domain\Entity\" />
     <Folder Include="Domain\Errors\" />
-    <Folder Include="IoC\" />
   </ItemGroup>
 
 </Project>

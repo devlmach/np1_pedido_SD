@@ -1,4 +1,8 @@
+using trabalho_np1_pedido.IoC;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddInfraDb(builder.Configuration);
 
 // Add services to the container.
 
