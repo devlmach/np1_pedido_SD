@@ -17,10 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Service\Interface\" />
-    <Folder Include="Common\Middleware\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Domain\Errors\" />
   </ItemGroup>
 
 </Project>
