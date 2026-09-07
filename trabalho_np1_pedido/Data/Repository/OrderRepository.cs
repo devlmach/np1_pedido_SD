@@ -1,0 +1,87 @@
+﻿using Microsoft.EntityFrameworkCore;
+using trabalho_np1_pedido.Application.Dto;
+using trabalho_np1_pedido.Data.Context;
+using trabalho_np1_pedido.Data.Repository.Interface;
+using trabalho_np1_pedido.Domain.Entity;
+
+namespace trabalho_np1_pedido.Data.Repository
+{
+    public class OrderRepository : IOrderRepository
+    {
+        private readonly ApplicationDbContext _context;
+        public OrderRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<OrderItemDto> GetOrderByIdAsync(long id)
+        {
+            var order = await (from pedido in _context.Orders.AsNoTracking()
+                               where pedido.Id == id && pedido.IsActive
+                               select new OrderItemDto
+                               {
+                                   OrderId = pedido.Id,
+                                   CustomerName = pedido.ClientName,
+                                   Address = pedido.Address,
+                                   OrderDate = pedido.OrderDate,
+                                   Products = pedido.Products,
+                                   TotalOrderPrice = pedido.TotalOrderPrice
+                               })
+                               .FirstOrDefaultAsync();
+
+            return order;
+        }
+
+        public async Task<List<OrderItemDto>> GetAllOrdersAsync()
+        {
+            var orders = await (from pedido in _context.Orders.AsNoTracking()
+                               select new OrderItemDto
+                               {
+                                   OrderId = pedido.Id,
+                                   CustomerName = pedido.ClientName,
+                                   Address = pedido.Address,
+                                   OrderDate = pedido.OrderDate,
+                                   Products = pedido.Products,
+                                   TotalOrderPrice = pedido.TotalOrderPrice
+                               }).ToListAsync();
+
+            return orders;
+        }
+
+        public async Task CreateOrderAsync(OrderItemAddDto orderItemAddDto)
+        {
+            var AddOrder = new Order
+            {
+                ClientName = orderItemAddDto.ClientName,
+                Address = orderItemAddDto.Address,
+                Products = orderItemAddDto.Products,
+            };
+
+            await _context.Orders.AddAsync(AddOrder);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto)
+        {
+            var response = await (from pedidos in _context.Orders
+                                      where pedidos.Id == id && pedidos.IsActive
+                                      select pedidos).FirstOrDefaultAsync();
+
+            response.ClientName = orderItemUpdateDto.ClientName ?? response.ClientName;
+            response.Address = orderItemUpdateDto.Address ?? response.Address;
+            response.Products = orderItemUpdateDto.Products ?? response.Products;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteOrderAsync(long id)
+        {
+            var response = await (from pedidos in _context.Orders
+                                 where pedidos.Id == id && pedidos.IsActive
+                                 select pedidos).FirstOrDefaultAsync();
+
+            response!.IsActive = false;
+            await _context.SaveChangesAsync();
+        }
+    }
+}

@@ -1,8 +1,11 @@
+using trabalho_np1_pedido.Application.Mapping;
 using trabalho_np1_pedido.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfraDb(builder.Configuration);
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingDtoToEntity).Assembly);
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingEntityToDto).Assembly);
 
 // Add services to the container.
 
