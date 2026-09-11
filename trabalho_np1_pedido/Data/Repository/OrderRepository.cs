@@ -3,6 +3,7 @@ using trabalho_np1_pedido.Application.Dto;
 using trabalho_np1_pedido.Data.Context;
 using trabalho_np1_pedido.Data.Repository.Interface;
 using trabalho_np1_pedido.Domain.Entity;
+using trabalho_np1_pedido.Domain.Errors;
 
 namespace trabalho_np1_pedido.Data.Repository
 {
@@ -21,7 +22,7 @@ namespace trabalho_np1_pedido.Data.Repository
                                select new OrderItemDto
                                {
                                    OrderId = pedido.Id,
-                                   CustomerName = pedido.ClientName,
+                                   ClientName = pedido.ClientName,
                                    Address = pedido.Address,
                                    OrderDate = pedido.OrderDate,
                                    Products = pedido.Products,
@@ -35,10 +36,11 @@ namespace trabalho_np1_pedido.Data.Repository
         public async Task<List<OrderItemDto>> GetAllOrdersAsync()
         {
             var orders = await (from pedido in _context.Orders.AsNoTracking()
+                                where pedido.IsActive
                                select new OrderItemDto
                                {
                                    OrderId = pedido.Id,
-                                   CustomerName = pedido.ClientName,
+                                   ClientName = pedido.ClientName,
                                    Address = pedido.Address,
                                    OrderDate = pedido.OrderDate,
                                    Products = pedido.Products,
@@ -50,14 +52,15 @@ namespace trabalho_np1_pedido.Data.Repository
 
         public async Task CreateOrderAsync(OrderItemAddDto orderItemAddDto)
         {
-            var AddOrder = new Order
+            var addOrder = new Order
             {
                 ClientName = orderItemAddDto.ClientName,
                 Address = orderItemAddDto.Address,
                 Products = orderItemAddDto.Products,
+                TotalOrderPrice = orderItemAddDto.Products.Sum(p => p.TotalPrice),
             };
 
-            await _context.Orders.AddAsync(AddOrder);
+            await _context.Orders.AddAsync(addOrder);
             await _context.SaveChangesAsync();
         }
 
@@ -65,11 +68,14 @@ namespace trabalho_np1_pedido.Data.Repository
         {
             var response = await (from pedidos in _context.Orders
                                       where pedidos.Id == id && pedidos.IsActive
-                                      select pedidos).FirstOrDefaultAsync();
+                                      select pedidos).FirstOrDefaultAsync()
+                                      ?? throw new NotFoundException("Order not found");
 
             response.ClientName = orderItemUpdateDto.ClientName ?? response.ClientName;
             response.Address = orderItemUpdateDto.Address ?? response.Address;
             response.Products = orderItemUpdateDto.Products ?? response.Products;
+            response.UpdatedAt = DateTime.UtcNow;
+            response.TotalOrderPrice = orderItemUpdateDto.Products!.Sum(s => s.TotalPrice);
 
             await _context.SaveChangesAsync();
         }

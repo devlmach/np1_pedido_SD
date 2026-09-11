@@ -58,7 +58,6 @@ namespace trabalho_np1_pedido.Common.Middleware
     {
         public int StatusCode { get; set; }
         public required string Message { get; set; }
-        public IEnumerable<ErrorDetailResponse>? Details { get; set; }
     }
 
     public class ErrorDetailResponse

@@ -4,6 +4,8 @@ using trabalho_np1_pedido.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 builder.Services.AddInfraDb(builder.Configuration);
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingDtoToEntity).Assembly);
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingEntityToDto).Assembly);

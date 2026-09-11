@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using trabalho_np1_pedido.Application.Dto;
 using trabalho_np1_pedido.Domain.Entity;
 
 namespace trabalho_np1_pedido.Application.Mapping
@@ -9,6 +10,7 @@ namespace trabalho_np1_pedido.Application.Mapping
         {
             CreateMap<OrderItemDto, Order>();
             CreateMap<OrderItemAddDto, Order>();
+            CreateMap<OrderItemUpdateDto, Order>();
         }
     }
 }

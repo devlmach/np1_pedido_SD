@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using trabalho_np1_pedido.Application.Service;
+using trabalho_np1_pedido.Application.Service.Interface;
 using trabalho_np1_pedido.Data.Context;
 using trabalho_np1_pedido.Data.Repository;
 using trabalho_np1_pedido.Data.Repository.Interface;
@@ -13,6 +15,7 @@ namespace trabalho_np1_pedido.IoC
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddAutoMapper(cfg =>
             {

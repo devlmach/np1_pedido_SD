@@ -30,6 +30,10 @@ namespace trabalho_np1_pedido.Application.Service
         public async Task<List<OrderItemDto>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
+
+            if (orders == null || orders.Count == 0)
+                return [];
+
             return orders;
         }
 
