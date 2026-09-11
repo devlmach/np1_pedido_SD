@@ -47,9 +47,6 @@ namespace trabalho_np1_pedido.Application.Service
 
         public async Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto)
         {
-            var _ = await _orderRepository.GetOrderByIdAsync(id)
-                ?? throw new NotFoundException("Order not found");
-
             await _orderRepository.UpdateOrderAsync(id, orderItemUpdateDto);
         }
     }

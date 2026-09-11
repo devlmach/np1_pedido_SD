@@ -20,6 +20,11 @@ namespace trabalho_np1_pedido.Data.Context
                         itens => JsonSerializer.Serialize(itens, (JsonSerializerOptions)null),
                         json => JsonSerializer.Deserialize<List<ProductItemDto>>(json, (JsonSerializerOptions)null));
 
+            modelBuilder.Entity<Order>()
+                .Property(s => s.OrderStatus)
+                .HasColumnType("text")
+                .HasConversion<string>();   
+
             base.OnModelCreating(modelBuilder);
         }
         }

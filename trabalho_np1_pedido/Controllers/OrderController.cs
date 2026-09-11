@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using trabalho_np1_pedido.Application.Dto;
 using trabalho_np1_pedido.Application.Service.Interface;
 using trabalho_np1_pedido.Common.Middleware;
 
 namespace trabalho_np1_pedido.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using trabalho_np1_pedido.Application.Dto;
+using trabalho_np1_pedido.Common.Enum;
 using trabalho_np1_pedido.Data.Context;
 using trabalho_np1_pedido.Data.Repository.Interface;
 using trabalho_np1_pedido.Domain.Entity;
@@ -26,7 +27,8 @@ namespace trabalho_np1_pedido.Data.Repository
                                    Address = pedido.Address,
                                    OrderDate = pedido.OrderDate,
                                    Products = pedido.Products,
-                                   TotalOrderPrice = pedido.TotalOrderPrice
+                                   TotalOrderPrice = pedido.TotalOrderPrice,
+                                   OrderStatus = pedido.OrderStatus
                                })
                                .FirstOrDefaultAsync();
 
@@ -44,8 +46,13 @@ namespace trabalho_np1_pedido.Data.Repository
                                    Address = pedido.Address,
                                    OrderDate = pedido.OrderDate,
                                    Products = pedido.Products,
-                                   TotalOrderPrice = pedido.TotalOrderPrice
-                               }).ToListAsync();
+                                   TotalOrderPrice = pedido.TotalOrderPrice,
+                                   OrderStatus = pedido.OrderStatus
+                               })
+                               .ToListAsync();
+
+            if (orders is not null)
+                orders = orders.OrderBy(s => s.OrderId).ToList();
 
             return orders;
         }
@@ -57,6 +64,7 @@ namespace trabalho_np1_pedido.Data.Repository
                 ClientName = orderItemAddDto.ClientName,
                 Address = orderItemAddDto.Address,
                 Products = orderItemAddDto.Products,
+                OrderStatus = OrderStatus.Criado,
                 TotalOrderPrice = orderItemAddDto.Products.Sum(p => p.TotalPrice),
             };
 
@@ -75,7 +83,7 @@ namespace trabalho_np1_pedido.Data.Repository
             response.Address = orderItemUpdateDto.Address ?? response.Address;
             response.Products = orderItemUpdateDto.Products ?? response.Products;
             response.UpdatedAt = DateTime.UtcNow;
-            response.TotalOrderPrice = orderItemUpdateDto.Products!.Sum(s => s.TotalPrice);
+            response.TotalOrderPrice = orderItemUpdateDto.Products is not null ? orderItemUpdateDto.Products.Sum(s => s.TotalPrice) : response.TotalOrderPrice ;
 
             await _context.SaveChangesAsync();
         }

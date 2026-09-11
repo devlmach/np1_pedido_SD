@@ -1,4 +1,6 @@
-﻿namespace trabalho_np1_pedido.Application.Dto
+﻿using trabalho_np1_pedido.Common.Enum;
+
+namespace trabalho_np1_pedido.Application.Dto
 {
     public class OrderItemDto
     {
@@ -7,6 +9,7 @@
         public string Address { get; set; }
         public DateTime OrderDate { get; set; }
         public List<ProductItemDto> Products { get; set; }
+        public OrderStatus OrderStatus { get; set; }
         public decimal TotalOrderPrice { get; set; }
     }
 }
