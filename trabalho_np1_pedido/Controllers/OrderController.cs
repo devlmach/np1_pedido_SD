@@ -65,6 +65,19 @@ namespace trabalho_np1_pedido.Controllers
         }
 
         /// <summary>
+        /// Endpoint responsável por alterar apenas o status de um pedido existente pelo ID.
+        /// </summary>
+        [HttpPatch("{id:long}/status")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateOrderStatusAsync([FromRoute] long id, [FromBody] OrderStatusUpdateDto orderStatusUpdateDto)
+        {
+            await _orderService.UpdateOrderStatusAsync(id, orderStatusUpdateDto);
+            return NoContent();
+        }
+
+        /// <summary>
         /// Endpoint responsável por deletar um pedido pelo ID.
         /// </summary>
         [HttpDelete("{id:long}")]

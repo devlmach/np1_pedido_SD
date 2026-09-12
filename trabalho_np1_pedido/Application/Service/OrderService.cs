@@ -49,5 +49,13 @@ namespace trabalho_np1_pedido.Application.Service
         {
             await _orderRepository.UpdateOrderAsync(id, orderItemUpdateDto);
         }
+
+        public async Task UpdateOrderStatusAsync(long id, OrderStatusUpdateDto orderStatusUpdateDto)
+        {
+            var _ = await _orderRepository.GetOrderByIdAsync(id)
+                ?? throw new NotFoundException("Order not found");
+
+            await _orderRepository.UpdateOrderStatusAsync(id, orderStatusUpdateDto.Status);
+        }
     }
 }

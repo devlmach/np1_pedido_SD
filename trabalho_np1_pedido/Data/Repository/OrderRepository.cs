@@ -77,7 +77,7 @@ namespace trabalho_np1_pedido.Data.Repository
             var response = await (from pedidos in _context.Orders
                                       where pedidos.Id == id && pedidos.IsActive
                                       select pedidos).FirstOrDefaultAsync()
-                                      ?? throw new NotFoundException("Order not found");
+                                        ?? throw new NotFoundException("Order not found");
 
             response.ClientName = orderItemUpdateDto.ClientName ?? response.ClientName;
             response.Address = orderItemUpdateDto.Address ?? response.Address;
@@ -95,6 +95,19 @@ namespace trabalho_np1_pedido.Data.Repository
                                  select pedidos).FirstOrDefaultAsync();
 
             response!.IsActive = false;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderStatusAsync(long id, OrderStatus status)
+        {
+            var response = await (from pedidos in _context.Orders
+                                 where pedidos.Id == id && pedidos.IsActive
+                                 select pedidos).FirstOrDefaultAsync()
+                                    ?? throw new NotFoundException("Order not found");
+
+            response.OrderStatus = status;
+            response.UpdatedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
         }
     }

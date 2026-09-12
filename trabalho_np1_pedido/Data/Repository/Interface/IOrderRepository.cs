@@ -1,4 +1,5 @@
 ﻿using trabalho_np1_pedido.Application.Dto;
+using trabalho_np1_pedido.Common.Enum;
 
 namespace trabalho_np1_pedido.Data.Repository.Interface
 {
@@ -9,5 +10,6 @@ namespace trabalho_np1_pedido.Data.Repository.Interface
         Task CreateOrderAsync(OrderItemAddDto orderItemAddDto);
         Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto);
         Task DeleteOrderAsync(long id);
+        Task UpdateOrderStatusAsync(long id, OrderStatus status);
     }
 }

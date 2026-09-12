@@ -9,5 +9,6 @@ namespace trabalho_np1_pedido.Application.Service.Interface
         Task CreateOrderAsync(OrderItemAddDto orderItemAddDto);
         Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto);
         Task DeleteOrderAsync(long id);
+        Task UpdateOrderStatusAsync(long id, OrderStatusUpdateDto orderStatusUpdateDto);
     }
 }

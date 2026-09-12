@@ -7,8 +7,3 @@
 **/*.suo
 **/*.db
 **/*.vsidx
-
-#variaveis de ambiente
-.env
-**/.env
-!.env.example
