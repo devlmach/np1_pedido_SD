@@ -21,7 +21,11 @@ Controller (API) → Service → Repository → PostgreSQL
 
 ## Tecnologias
 
-.NET 8 · ASP.NET Core Web API · Entity Framework Core + Npgsql · PostgreSQL 16 · Docker / Docker Compose
+- .NET 8
+- ASP.NET Core Web API
+- Entity Framework Core + Npgsql
+- PostgreSQL 16
+- Docker / Docker Compose
 
 ## Modelo de dados — Pedido
 
@@ -37,7 +41,8 @@ Controller (API) → Service → Repository → PostgreSQL
 
 ## Endpoints
 
-Base URL: `http://localhost:8000`
+Base URL: `http://localhost:8000` </br>
+Swagger disponível em `http://localhost:8000/swagger`.
 
 | Método | Rota | Descrição |
 |---|---|---|
@@ -49,8 +54,6 @@ Base URL: `http://localhost:8000`
 | `DELETE` | `/Order/{id}` | Remove pedido (soft delete) |
 | `GET` | `/Health` | Health check (`{"status":"Ok"}`) |
 
-Swagger disponível em `http://localhost:8000/swagger`.
-
 **Exemplo — `POST /Order`:**
 ```json
 {
@@ -59,6 +62,21 @@ Swagger disponível em `http://localhost:8000/swagger`.
   "products": [
     { "productName": "Caneta", "productQuantity": 2, "productPrice": 3.50 }
   ]
+}
+```
+**Exemplo - `GET /Order/{id}`:** 
+- é adicionado 4 campos, setando data da criação do pedido (data/hora atual), valor total por produto, o status do pedido (automaticamente como criado após a criação do pedido) e o valor total do pedido.
+```json
+{
+  "clientName": "Maria",
+  "address": "Rua A, 123",
+  "orderDate": "2026-09-19T16:34:44.67438Z",
+  "products": [
+    { "productName": "Caneta", "productQuantity": 2, "productPrice": 3.50, "totalPrice": 7.0 },
+    { "productName": "Estojo", "productQuantity": 1, "productPrice": 10.0, "totalPrice": 10.0 }
+  ],
+  "orderStatus": "Criado",
+  "totalOrderPrice": 17.0
 }
 ```
 
@@ -85,9 +103,9 @@ Ao final, a API estará disponível em `http://localhost:8000`.
 
 ## Critérios mínimos atendidos
 
-- [x] `docker compose up -d --build` inicia aplicação e banco sem passos manuais
-- [x] `POST /Order` persiste um pedido
-- [x] `GET /Order/{id}` e `GET /Order` recuperam os dados persistidos
-- [x] `GET /Health` confirma que a aplicação está operacional
-- [x] Reiniciar a API ou o banco não apaga os pedidos (dados no volume `pgdata`)
-- [x] Configuração por variável de ambiente — nenhuma credencial fixa no código
+- ✅ `docker compose up -d --build` inicia aplicação e banco sem passos manuais
+- ✅ `POST /Order` persiste um pedido
+- ✅ `GET /Order/{id}` e `GET /Order` recuperam os dados persistidos
+- ✅ `GET /Health` confirma que a aplicação está operacional
+- ✅ Reiniciar a API ou o banco não apaga os pedidos (dados no volume `pgdata`)
+- ✅ Configuração por variável de ambiente — nenhuma credencial fixa no código
