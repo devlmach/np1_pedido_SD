@@ -1,43 +1,42 @@
 services:
-    postgres:
-        image: postgres:16-alpine
-        container_name: pedidos_postgres
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        volumes:
-            - pgdata:/var/lib/postgresql/data
-        ports:
-            - "${POSTGRES_PORT}:5432"
-        networks:
-            - pedidos-net
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres -d pedido_np1"]
-            interval: 5s
-            timeout: 5s
-            retries: 10
+  postgres:
+    image: postgres:16-alpine
+    container_name: pedidos_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pedido_np1}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pedidos-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-pedido_np1}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-    pedidos:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: pedidos_api
-        depends_on:
-            postgres:
-                condition: service_healthy
-        environment:
-            ASPNETCORE_ENVIRONMENT: Development
-            ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-        ports:
-            - "${API_PORT}:8080"
-        networks:
-            - pedidos-net
+  pedidos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pedidos_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=postgres;Port=5432;Database=${POSTGRES_DB:-pedido_np1};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+    ports:
+      - "8000:8080"
+    networks:
+      - pedidos-net
 
 networks:
-    pedidos-net:
-          driver: bridge
-          
+  pedidos-net:
+    driver: bridge
+
 volumes:
-    pgdata:
-    
+  pgdata:
