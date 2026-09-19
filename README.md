@@ -37,6 +37,8 @@ Controller (API) → Service → Repository → PostgreSQL
 
 ## Endpoints
 
+Base URL: `http://localhost:8000`
+
 | Método | Rota | Descrição |
 |---|---|---|
 | `POST` | `/Order` | Cria pedido |
@@ -44,8 +46,10 @@ Controller (API) → Service → Repository → PostgreSQL
 | `GET` | `/Order/{id}` | Consulta pedido (200 / 404) |
 | `PATCH` | `/Order/{id}` | Atualiza pedido |
 | `PATCH` | `/Order/{id}/status` | Altera apenas o status |
-| `DELETE` | `/Order/{id}` | Remove pedido |
-| `GET` | `/Health` | Health check (`{"status":"ok"}`) |
+| `DELETE` | `/Order/{id}` | Remove pedido (soft delete) |
+| `GET` | `/Health` | Health check (`{"status":"Ok"}`) |
+
+Swagger disponível em `http://localhost:8000/swagger`.
 
 **Exemplo — `POST /Order`:**
 ```json
@@ -60,25 +64,28 @@ Controller (API) → Service → Repository → PostgreSQL
 
 ## Como executar
 
-1. Crie um `.env` na raiz do projeto:
-```env
-POSTGRES_DB=pedido_np1
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=escolha_uma_senha
-POSTGRES_PORT=5432
-API_PORT=8080
-```
-
-2. Suba o ambiente:
 ```bash
-docker compose up --build
+git clone <URL_DO_REPOSITORIO>
+cd <NOME_DO_REPOSITORIO>
+docker compose up -d --build
 ```
 
-A API aplica as migrations automaticamente. Acesse em `http://localhost:8080` (Swagger em `/swagger`).
+Não é necessário nenhum passo manual adicional — a aplicação aplica as migrations do banco automaticamente ao subir, e as credenciais do PostgreSQL já têm valores padrão definidos no próprio `docker-compose.yml` (sem depender de um arquivo `.env`).
+
+Ao final, a API estará disponível em `http://localhost:8000`.
+
+> Caso queira customizar as credenciais do banco localmente, é possível criar um `.env` na raiz do projeto com `POSTGRES_DB`, `POSTGRES_USER` e `POSTGRES_PASSWORD` — esses valores sobrescrevem os defaults, mas não são obrigatórios para a aplicação funcionar.
+
+## Serviços do `docker-compose.yml`
+
+| Serviço | Descrição |
+|---|---|
+| `pedidos` | API de Pedidos (build a partir do `Dockerfile`) |
+| `postgres` | Banco de dados PostgreSQL 16 |
 
 ## Critérios mínimos atendidos
 
-- [x] `docker compose up` inicia aplicação e banco
+- [x] `docker compose up -d --build` inicia aplicação e banco sem passos manuais
 - [x] `POST /Order` persiste um pedido
 - [x] `GET /Order/{id}` e `GET /Order` recuperam os dados persistidos
 - [x] `GET /Health` confirma que a aplicação está operacional
