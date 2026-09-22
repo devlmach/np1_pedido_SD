@@ -2,6 +2,13 @@
 
 Projeto incremental da disciplina **Desenvolvimento de Sistemas Distribuídos**. Primeira entrega: aplicação de Pedidos + banco PostgreSQL, executando como componentes separados.
 
+## Identificação dos Integrantes
+```
+Nome: Rafael Luna Machiavelli
+RA: R017885
+Turma: CC7P13
+```
+
 ## Arquitetura
 
 ```
