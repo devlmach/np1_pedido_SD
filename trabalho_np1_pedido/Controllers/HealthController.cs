@@ -2,12 +2,12 @@
 
 namespace trabalho_np1_pedido.Controllers
 {
-    [Route("[controller]")]
+    [Route("health")]
     [ApiController]
     public class HealthController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<string> GetHealth()
+        public ActionResult<object> GetHealth()
         {
             return Ok(new { Status = "Ok" });
         }

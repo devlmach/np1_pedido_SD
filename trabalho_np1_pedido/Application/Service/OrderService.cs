@@ -14,9 +14,9 @@ namespace trabalho_np1_pedido.Application.Service
             _orderRepository = orderRepository;
         }
 
-        public async Task CreateOrderAsync(OrderItemAddDto orderItemAddDto)
+        public async Task<OrderItemDto> CreateOrderAsync(OrderItemAddDto orderItemAddDto)
         {
-            await _orderRepository.CreateOrderAsync(orderItemAddDto);
+            return await _orderRepository.CreateOrderAsync(orderItemAddDto);
         }
 
         public async Task DeleteOrderAsync(long id)
@@ -55,7 +55,7 @@ namespace trabalho_np1_pedido.Application.Service
             var _ = await _orderRepository.GetOrderByIdAsync(id)
                 ?? throw new NotFoundException("Order not found");
 
-            await _orderRepository.UpdateOrderStatusAsync(id, orderStatusUpdateDto.Status);
+            await _orderRepository.UpdateOrderStatusAsync(id, orderStatusUpdateDto.Status.Value);
         }
     }
 }

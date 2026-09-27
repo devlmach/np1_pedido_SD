@@ -10,7 +10,7 @@ namespace trabalho_np1_pedido.Domain.Entity
         public string ClientName { get; set; }
         public string Address { get; set; }
         [JsonIgnore]
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public List<ProductItemDto> Products { get; set; }
         public decimal TotalOrderPrice { get; set; }
         public OrderStatus OrderStatus { get; set; }

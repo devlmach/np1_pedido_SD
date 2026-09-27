@@ -18,7 +18,7 @@ namespace trabalho_np1_pedido.Data.Repository
 
         public async Task<OrderItemDto> GetOrderByIdAsync(long id)
         {
-            var order = await (from pedido in _context.Orders.AsNoTracking()
+            return await (from pedido in _context.Orders.AsNoTracking()
                                where pedido.Id == id && pedido.IsActive
                                select new OrderItemDto
                                {
@@ -32,7 +32,6 @@ namespace trabalho_np1_pedido.Data.Repository
                                })
                                .FirstOrDefaultAsync();
 
-            return order;
         }
 
         public async Task<List<OrderItemDto>> GetAllOrdersAsync()
@@ -49,15 +48,20 @@ namespace trabalho_np1_pedido.Data.Repository
                                    TotalOrderPrice = pedido.TotalOrderPrice,
                                    OrderStatus = pedido.OrderStatus
                                })
+                               .OrderBy(s => s.OrderId)
                                .ToListAsync();
-
-            if (orders is not null)
-                orders = orders.OrderBy(s => s.OrderId).ToList();
 
             return orders;
         }
 
-        public async Task CreateOrderAsync(OrderItemAddDto orderItemAddDto)
+        public async Task<bool> ExistsActiveAsync(long id)
+        {
+            return await (from pedido in _context.Orders.AsNoTracking()
+                          where pedido.Id == id && pedido.IsActive
+                          select pedido).AnyAsync();
+        }
+
+        public async Task<OrderItemDto> CreateOrderAsync(OrderItemAddDto orderItemAddDto)
         {
             var addOrder = new Order
             {
@@ -70,31 +74,45 @@ namespace trabalho_np1_pedido.Data.Repository
 
             await _context.Orders.AddAsync(addOrder);
             await _context.SaveChangesAsync();
+
+            return new OrderItemDto
+            {
+                OrderId = addOrder.Id,
+                ClientName = addOrder.ClientName,
+                Address = addOrder.Address,
+                OrderDate = addOrder.OrderDate,
+                Products = addOrder.Products,
+                TotalOrderPrice = addOrder.TotalOrderPrice,
+                OrderStatus = addOrder.OrderStatus
+            };
         }
 
         public async Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto)
         {
-            var response = await (from pedidos in _context.Orders
-                                      where pedidos.Id == id && pedidos.IsActive
-                                      select pedidos).FirstOrDefaultAsync()
-                                        ?? throw new NotFoundException("Order not found");
+            var response = await _context.Orders
+                .FirstOrDefaultAsync(pedidos => pedidos.Id == id && pedidos.IsActive)
+                ?? throw new NotFoundException($"Pedido {id} nao encontrado durante a atualizacao.");
 
             response.ClientName = orderItemUpdateDto.ClientName ?? response.ClientName;
             response.Address = orderItemUpdateDto.Address ?? response.Address;
             response.Products = orderItemUpdateDto.Products ?? response.Products;
             response.UpdatedAt = DateTime.UtcNow;
-            response.TotalOrderPrice = orderItemUpdateDto.Products is not null ? orderItemUpdateDto.Products.Sum(s => s.TotalPrice) : response.TotalOrderPrice ;
+            response.TotalOrderPrice = orderItemUpdateDto.Products is not null
+                ? orderItemUpdateDto.Products.Sum(s => s.TotalPrice)
+                : response.TotalOrderPrice;
 
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteOrderAsync(long id)
         {
-            var response = await (from pedidos in _context.Orders
-                                 where pedidos.Id == id && pedidos.IsActive
-                                 select pedidos).FirstOrDefaultAsync();
+            var response = await _context.Orders
+                .FirstOrDefaultAsync(pedidos => pedidos.Id == id && pedidos.IsActive)
+                ?? throw new NotFoundException($"Pedido {id} nao encontrado durante a remocao.");
 
-            response!.IsActive = false;
+            response.IsActive = false;
+            response.UpdatedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
         }
 

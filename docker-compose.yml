@@ -29,6 +29,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Server=postgres;Port=5432;Database=${POSTGRES_DB:-pedido_np1};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+      AUTOMAPPER_LICENSE_KEY: ${AUTOMAPPER_LICENSE_KEY:-}
     ports:
       - "8000:8080"
     networks:

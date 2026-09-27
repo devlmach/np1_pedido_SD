@@ -7,9 +7,11 @@ namespace trabalho_np1_pedido.Data.Repository.Interface
     {
         Task<OrderItemDto> GetOrderByIdAsync(long id);
         Task<List<OrderItemDto>> GetAllOrdersAsync();
-        Task CreateOrderAsync(OrderItemAddDto orderItemAddDto);
+        Task<OrderItemDto
+            > CreateOrderAsync(OrderItemAddDto orderItemAddDto);
         Task UpdateOrderAsync(long id, OrderItemUpdateDto orderItemUpdateDto);
         Task DeleteOrderAsync(long id);
         Task UpdateOrderStatusAsync(long id, OrderStatus status);
+        Task<bool> ExistsActiveAsync(long id);
     }
 }

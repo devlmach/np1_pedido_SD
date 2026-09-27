@@ -25,6 +25,8 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Logging.AddFilter("LuckyPennySoftware.AutoMapper.License", LogLevel.None);
+
 var app = builder.Build();
 
 /// Este bloco aplica as migrations pendentes assim que subir a aplicação

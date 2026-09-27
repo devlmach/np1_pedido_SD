@@ -5,7 +5,7 @@ using trabalho_np1_pedido.Common.Middleware;
 
 namespace trabalho_np1_pedido.Controllers
 {
-    [Route("[controller]")]
+    [Route("pedidos")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -43,12 +43,12 @@ namespace trabalho_np1_pedido.Controllers
         /// Endpoint responsável por criar um novo pedido.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(OrderItemDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateOrderAsync([FromBody] OrderItemAddDto orderItemAddDto)
+        public async Task<ActionResult<OrderItemDto>> CreateOrderAsync([FromBody] OrderItemAddDto orderItemAddDto)
         {
-            await _orderService.CreateOrderAsync(orderItemAddDto);
-            return Created();
+            var result = await _orderService.CreateOrderAsync(orderItemAddDto);
+            return Ok(result);
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace trabalho_np1_pedido.Application.Dto
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Address { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [MinLength(1, ErrorMessage = "O pedido deve conter pelo menos um produto.")]
         public List<ProductItemDto> Products { get; set; }
         [JsonIgnore]
         public OrderStatus OrderStatus { get; set; }

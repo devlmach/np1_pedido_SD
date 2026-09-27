@@ -6,6 +6,6 @@ namespace trabalho_np1_pedido.Application.Dto
     public class OrderStatusUpdateDto
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public OrderStatus Status { get; set; }
+        public OrderStatus? Status { get; set; }
     }
 }
