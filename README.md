@@ -53,15 +53,15 @@ Swagger disponível em `http://localhost:8000/swagger`.
 
 | Método | Rota | Descrição |
 |---|---|---|
-| `POST` | `/Order` | Cria pedido |
-| `GET` | `/Order` | Lista pedidos |
-| `GET` | `/Order/{id}` | Consulta pedido (200 / 404) |
-| `PATCH` | `/Order/{id}` | Atualiza pedido |
-| `PATCH` | `/Order/{id}/status` | Altera apenas o status |
-| `DELETE` | `/Order/{id}` | Remove pedido (soft delete) |
-| `GET` | `/Health` | Health check (`{"status":"Ok"}`) |
+| `POST` | `/pedidos` | Cria pedido |
+| `GET` | `/pedidos` | Lista pedidos |
+| `GET` | `/pedidos/{id}` | Consulta pedido (200 / 404) |
+| `PATCH` | `/pedidos/{id}` | Atualiza pedido |
+| `PATCH` | `/pedidos/{id}/status` | Altera apenas o status |
+| `DELETE` | `/pedidos/{id}` | Remove pedido (soft delete) |
+| `GET` | `/health` | Health check (`{"status":"Ok"}`) |
 
-**Exemplo — `POST /Order`:**
+**Exemplo — `POST /pedidos`:**
 ```json
 {
   "clientName": "Maria",
@@ -71,7 +71,7 @@ Swagger disponível em `http://localhost:8000/swagger`.
   ]
 }
 ```
-**Exemplo - `GET /Order/{id}`:** 
+**Exemplo - `GET /pedidos/{id}`:** 
 - é adicionado 4 campos, setando data da criação do pedido (data/hora atual), valor total por produto, o status do pedido (automaticamente como criado após a criação do pedido) e o valor total do pedido.
 ```json
 {
@@ -111,8 +111,8 @@ Ao final, a API estará disponível em `http://localhost:8000`.
 ## Critérios mínimos atendidos
 
 - ✅ `docker compose up -d --build` inicia aplicação e banco sem passos manuais
-- ✅ `POST /Order` persiste um pedido
-- ✅ `GET /Order/{id}` e `GET /Order` recuperam os dados persistidos
-- ✅ `GET /Health` confirma que a aplicação está operacional
+- ✅ `POST /pedidos` persiste um pedido
+- ✅ `GET /pedidos/{id}` e `GET /pedidos` recuperam os dados persistidos
+- ✅ `GET /health` confirma que a aplicação está operacional
 - ✅ Reiniciar a API ou o banco não apaga os pedidos (dados no volume `pgdata`)
 - ✅ Configuração por variável de ambiente — nenhuma credencial fixa no código
